@@ -1,13 +1,13 @@
 {
   "schemaVersion": "cofabric.memory.project.v2",
   "name": "PaceKeeper",
-  "oneLineDescription": "A personal running log app for tracking runs, distance, duration, and pace over time.",
-  "whatItIs": "PaceKeeper is a personal running log application built with Next.js 14 App Router and TypeScript, backed by PostgreSQL via Supabase. It allows a single authenticated user to log runs (date, distance, duration, optional notes), view their history in reverse chronological order with pagination, edit or delete individual runs, and see a dashboard of all-time and weekly summary statistics. All distances are stored in kilometers and converted for display based on the user's preference (miles or kilometers). The application is web-first and mobile-responsive, with no social features, no GPS integration, no charts, and no external fitness service connections.",
+  "oneLineDescription": "A single-user personal running log app for recording and viewing runs with calculated pace.",
+  "whatItIs": "PaceKeeper is a personal running log application where a single user can record runs by entering a date, distance (in kilometers), and duration (in minutes). The app displays all logged runs in reverse chronological order with automatically calculated pace (min/km), allows deletion of individual runs, and persists data in a local JSON file on the server. There is no authentication, no database, and no multi-user support. The UI is built with Next.js 14 App Router, TypeScript, and CSS Modules, and is intended to be functional on both mobile and desktop.",
   "stack": [
     {
       "name": "next",
       "version": "^14.2.0",
-      "purpose": "App Router framework for server components and routing"
+      "purpose": "App Router framework for routing, server actions, and rendering"
     },
     {
       "name": "react",
@@ -22,71 +22,46 @@
     {
       "name": "typescript",
       "version": "^5.5.0",
-      "purpose": "Static typing in strict mode"
+      "purpose": "Static typing for the codebase"
     }
   ],
   "externalIntegrations": [],
   "coreUserFlows": [
-    "A new user signs up with email and password, is redirected to the dashboard, and sets their preferred distance unit.",
-    "An authenticated user fills out the run logging form with date, distance, duration, and optional notes, then submits to save the run.",
-    "An authenticated user browses their paginated run history, clicks a run to view its detail page, and edits or deletes it.",
-    "An authenticated user views the dashboard to see total runs, total distance, runs this week, and distance this week."
+    "User fills out the add-run form with a date, distance, and duration, submits it, and sees the new run appear in the list.",
+    "User views the home page and sees all past runs sorted most-recent-first, each showing date, distance, duration, and calculated pace.",
+    "User clicks the delete control on a run and it is immediately removed from the list and from storage.",
+    "User visits the app with no runs logged and sees the empty-state message 'No runs yet. Add your first run!'"
   ],
   "outOfScope": [
-    "OAuth authentication (Google, Strava, etc.)",
-    "Password reset or email verification",
-    "GPS tracking or route maps",
-    "Heart rate or other fitness device metrics",
-    "Social features (sharing, following, comments, likes)",
-    "Data visualization (charts, graphs)",
-    "Training plans, goals, or coaching",
-    "Import from external services",
-    "Export or data download",
-    "Native mobile applications",
-    "Offline functionality",
-    "Dark mode or theme customization",
-    "Date range filtering or search",
-    "Activities other than running",
-    "Bulk operations (import, delete multiple)"
+    "User authentication or multi-user support",
+    "Database integration",
+    "Editing existing runs",
+    "Statistics, analytics, or charts",
+    "GPX/GPS import",
+    "Unit conversion (miles)",
+    "Dark mode",
+    "PWA or offline functionality",
+    "Deployment configuration"
   ],
   "dataModel": [
     {
-      "entity": "users",
-      "purpose": "Stores authenticated user accounts managed by Supabase Auth.",
+      "entity": "Run",
+      "purpose": "Stores a single logged run with its date, distance, and duration, persisted in a local JSON file.",
       "keyFields": [
-        "email",
-        "password"
-      ]
-    },
-    {
-      "entity": "user_preferences",
-      "purpose": "Stores each user's preferred distance unit (miles or kilometers), defaulting to miles.",
-      "keyFields": [
-        "user_id",
-        "distance_unit"
-      ]
-    },
-    {
-      "entity": "runs",
-      "purpose": "Stores each logged run with date, distance in kilometers, duration in seconds, and optional notes.",
-      "keyFields": [
-        "user_id",
+        "id",
         "date",
-        "distance_km",
-        "duration_seconds",
-        "notes"
+        "distanceKm",
+        "durationMin"
       ]
     }
   ],
   "crossCuttingPrinciples": [
-    "All run data is private to the owning user; row-level security is enforced at the database layer.",
-    "Server Components are used by default; Client Components are only introduced where interactivity requires them.",
-    "All data mutations are performed via Server Actions.",
-    "Distances are always stored in kilometers and converted to the user's preferred unit only at the display layer.",
-    "Durations are always stored in total seconds and formatted for display.",
-    "The user's distance unit preference applies globally to all data entry and display across every feature.",
-    "Unauthenticated users are redirected to the landing page; authenticated users are redirected to the dashboard.",
-    "Semantic HTML, keyboard navigation, associated form labels, and WCAG AA color contrast are required throughout."
+    "The application is single-user only with no user identification or authentication anywhere in the stack.",
+    "All data persists in a local JSON file via server-side read/write operations; there is no database.",
+    "Distance is always stored and displayed in kilometers; duration is always stored and displayed in minutes — no unit conversion.",
+    "Malformed storage data must fail gracefully with a logged error rather than crashing the app.",
+    "Styling must use CSS Modules exclusively — no external CSS frameworks are permitted.",
+    "The UI must be responsive and functional on both mobile and desktop."
   ],
-  "specSummary": "PaceKeeper is a focused, single-user running log web application. Its purpose is to let a runner record workouts and observe their history over time — nothing more. The technical foundation is Next.js 14 with the App Router, TypeScript in strict mode, Supabase for PostgreSQL and authentication, Tailwind CSS for styling, and deployment on Vercel. Authentication is email/password only with no OAuth, no password reset, and no email verification. Once logged in, a user lands on a dashboard showing four summary statistics: total runs, total distance, runs this week, and distance this week (week defined as Monday–Sunday). From the dashboard the user can navigate to log a new run via a form that accepts date (defaulting to today, rejecting future dates), distance with a unit selector, duration split into hours/minutes/seconds, and optional free-text notes up to 500 characters. Pace is derived automatically. The run history page lists runs in reverse chronological order, paginated at 10 per page, with each row showing date, distance, duration, pace, and truncated notes. Clicking a run opens a detail view where the user can edit any field using the same validation rules as creation, or permanently delete the run after a confirmation dialog. A single user preference — distance unit (miles or kilometers, defaulting to miles) — controls all display and entry throughout the application. All distances are stored internally in kilometers; all durations are stored in seconds. Row-level security at the database layer ensures users cannot access each other's data. There are no charts, no social features, no GPS, no import/export, and no bulk operations."
+  "specSummary": "PaceKeeper is a minimal, single-user running log built with Next.js 14 (App Router) and TypeScript, styled with CSS Modules, and persisting data in a local JSON file on the server — no database, no authentication. The product has five features implemented in a defined order. First, a foundational storage layer defines the Run data shape (id, date as ISO string, distanceKm, durationMin) and provides server-side read, add, and delete operations against a JSON file, with graceful handling of empty or malformed data. Second, the home page displays all runs sorted most-recent-first, showing formatted date, distance, duration, and pace calculated as durationMin divided by distanceKm to two decimal places, with an empty-state message when no runs exist. Third, an inline form above the run list lets the user log a new run with a date picker, distance input, and duration input; all fields are required, distance and duration must be positive, and the date cannot be in the future — validation errors appear inline and the form clears after successful submission. Fourth, each run in the list has a delete control that immediately removes the run from storage and updates the list, with no confirmation dialog. Fifth, basic responsive styling is applied using CSS Modules to cover layout, typography, form inputs with focus and error states, and styled buttons with hover and active states. Dark mode, editing runs, analytics, GPX import, mile conversion, PWA features, and deployment configuration are all explicitly out of scope."
 }
