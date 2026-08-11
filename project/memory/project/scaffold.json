@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "cofabric.memory.scaffold.v1",
+  "fileTree": [
+    {
+      "path": "package.json",
+      "purpose": "Next.js 14 + React 18 + TypeScript project manifest with dev/build/start scripts",
+      "isEmpty": false
+    },
+    {
+      "path": "tsconfig.json",
+      "purpose": "Strict TypeScript config with bundler module resolution and @/* path alias pointing to src/",
+      "isEmpty": false
+    },
+    {
+      "path": "next.config.js",
+      "purpose": "Minimal empty Next.js configuration",
+      "isEmpty": false
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "purpose": "Root App Router layout with title/description metadata",
+      "isEmpty": false
+    },
+    {
+      "path": "src/app/page.tsx",
+      "purpose": "Landing page showing PaceKeeper branding and hardcoded sample run list with pace calculation",
+      "isEmpty": true
+    },
+    {
+      "path": ".env.example",
+      "purpose": "Placeholder env file; no env vars needed yet",
+      "isEmpty": false
+    },
+    {
+      "path": "pr-docs/.gitkeep",
+      "purpose": "Placeholder to keep pr-docs directory tracked in git",
+      "isEmpty": false
+    },
+    {
+      "path": "memory/.gitkeep",
+      "purpose": "Placeholder to keep memory directory tracked in git",
+      "isEmpty": false
+    },
+    {
+      "path": "memory/project/.gitkeep",
+      "purpose": "Placeholder to keep memory/project directory tracked in git",
+      "isEmpty": false
+    },
+    {
+      "path": "memory/task/.gitkeep",
+      "purpose": "Placeholder to keep memory/task directory tracked in git",
+      "isEmpty": false
+    },
+    {
+      "path": "memory/agent/.gitkeep",
+      "purpose": "Placeholder to keep memory/agent directory tracked in git",
+      "isEmpty": false
+    },
+    {
+      "path": "memory/context/.gitkeep",
+      "purpose": "Placeholder to keep memory/context directory tracked in git",
+      "isEmpty": false
+    }
+  ],
+  "libraryExports": [],
+  "existingRoutes": [
+    {
+      "type": "page",
+      "path": "/",
+      "file": "src/app/page.tsx",
+      "httpMethods": null,
+      "isEmpty": true
+    }
+  ],
+  "databaseState": {
+    "migrationsExist": false,
+    "tables": []
+  },
+  "intentionallyEmpty": [
+    {
+      "file": "src/app/page.tsx",
+      "intendedPurpose": "Landing page for unauthenticated users with login/signup forms; currently contains only hardcoded sample data stub"
+    }
+  ]
+}
