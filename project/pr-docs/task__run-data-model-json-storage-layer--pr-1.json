@@ -1,0 +1,27 @@
+{
+  "overview": "Establishes the foundational data layer for PaceKeeper by defining the Run TypeScript interface and implementing a server-side JSON file persistence module. The storage module exposes getRuns(), addRun(), and deleteRun() with graceful error handling for missing or malformed JSON. No UI changes are included.",
+  "summary_json": {
+    "New type": "project/types/run.ts — Run interface with id (string/UUID), date (ISO YYYY-MM-DD), distanceKm (number), durationMin (number)",
+    "Storage module": "project/lib/runsStorage.ts — exports getRuns(), addRun(), deleteRun(); uses fs.readFileSync/writeFileSync",
+    "Persistence file": "project/data/runs.json — initialized as empty array []",
+    "ID generation": "crypto.randomUUID() or equivalent (server-side)",
+    "Error handling": "Missing file → empty array; malformed JSON → console.error + empty array",
+    "Out of scope": "UI components, styling, page modifications"
+  },
+  "files_changed": [
+    {
+      "path": "project/data/runs.json",
+      "summary": "Empty JSON array seed file that acts as the initial on-disk store for run records."
+    },
+    {
+      "path": "project/lib/runsStorage.ts",
+      "summary": "Server-side storage module implementing getRuns(), addRun(), and deleteRun() with safe read/write helpers and graceful error handling."
+    },
+    {
+      "path": "project/types/run.ts",
+      "summary": "Defines the Run TypeScript interface with id, date, distanceKm, and durationMin fields used across the application."
+    }
+  ],
+  "extras": "Verify: import { Run } from '../types/run' resolves correctly from lib/; confirm DATA_FILE path resolves to project/data/runs.json when process.cwd() is the project root. Follow-up: addRun() UUID generation and deleteRun() implementation are truncated in preview — confirm both are complete before merging.",
+  "fallback_text": "PR #1 adds the core data model and JSON storage layer for PaceKeeper. A Run interface is defined in project/types/run.ts with four fields: id (UUID string), date (ISO date string), distanceKm, and durationMin. The storage module at project/lib/runsStorage.ts uses Node fs to read/write project/data/runs.json, exposing getRuns(), addRun(), and deleteRun(). Missing file returns [], malformed JSON logs an error and returns []. The seed file runs.json is initialized as an empty array. No UI changes included."
+}
